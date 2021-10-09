@@ -23,7 +23,7 @@ func CreatePost(response http.ResponseWriter, request *http.Request) {
 	h := sha1.New()
 	h.Write([]byte(post.Password))
 	var HashedPassword string = base64.URLEncoding.EncodeToString(h.Sum(nil))
-	collection_user := client.Database("appointy").Collection("community")
+	collection_user := client.Database("Insta_Details").Collection("DetailsOfThePost")
 	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
 	err := collection_user.FindOne(ctx, User{Name: post.UserName, PasswordHash: HashedPassword}).Decode(&user)
 	if err != nil {
@@ -32,7 +32,7 @@ func CreatePost(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 	if post.UserName == user.Name && HashedPassword == user.PasswordHash {
-		collection_post := client.Database("appointy").Collection("gallery")
+		collection_post := client.Database("Insta_Details").Collection("gallery")
 		result, _ := collection_post.InsertOne(ctx, post)
 		json.NewEncoder(response).Encode(result)
 	} else {
@@ -46,7 +46,7 @@ func GetPost(response http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
 	id, _ := primitive.ObjectIDFromHex(params["id"])
 	var post Post
-	collection := client.Database("appointy").Collection("gallery")
+	collection := client.Database("Insta_Details").Collection("gallery")
 	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
 	err := collection.FindOne(ctx, User{ID: id}).Decode(&post)
 	if err != nil {
@@ -60,7 +60,7 @@ func GetPost(response http.ResponseWriter, request *http.Request) {
 func GetGallery(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("content-type", "application/json")
 	var gallery []Post
-	collection := client.Database("appointy").Collection("gallery")
+	collection := client.Database("Insta_Details").Collection("gallery")
 	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
 	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
@@ -81,3 +81,4 @@ func GetGallery(response http.ResponseWriter, request *http.Request) {
 	}
 	json.NewEncoder(response).Encode(gallery)
 }
+
