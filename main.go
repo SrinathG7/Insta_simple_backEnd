@@ -25,7 +25,7 @@ type User struct {
 
 type Post struct {
 	ID              primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	UserName        string             `json:"username,omitempty" bson:"username,omitempty"`
+	UserName        string             `json:"user_name,omitempty" bson:"user_name,omitempty"`
 	Password        string             `json:"password,omitempty" bson:"-"`
 	Caption         string             `json:"caption" bson:"caption"`
 	ImageURL        string             `json:"imageurl,omitempty" bson:"imageurl,omitempty"`
@@ -75,7 +75,7 @@ func Post_Details(response http.ResponseWriter, request *http.Request) {
 }
 
 func main() {
-	fmt.Println("Started")
+	fmt.Println("Application Started")
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
 	client, _ = mongo.Connect(ctx, clientOptions)
@@ -85,7 +85,8 @@ func main() {
 	router.HandleFunc("/posts", CreatePost).Methods("POST")
 	router.HandleFunc("/posts/{id}", GetPost).Methods("GET")
 	router.HandleFunc("/posts/users/{id}", Post_Details).Methods("GET")
-	router.HandleFunc("/UserDetails", GetUserDetails).Methods("GET")
-	router.HandleFunc("/DetailsOfThePost", GetDetailsOfThePost).Methods("GET")
+	router.HandleFunc("/UserDetails", GetCommunity).Methods("GET")
+	router.HandleFunc("/DetailsOfThePost", GetGallery).Methods("GET")
 	http.ListenAndServe(":5000", router)
 }
+
