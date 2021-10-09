@@ -52,7 +52,7 @@ func GetUser(response http.ResponseWriter, request *http.Request) {
 func GetCommunity(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("content-type", "application/json")
 	var community []User
-	collection := client.Database("Insta_Data").Collection("DetailsOfThePost")
+	collection := client.Database("Insta_Data").Collection("UserDetails")
 	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
 	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
