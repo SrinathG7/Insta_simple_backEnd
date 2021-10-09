@@ -18,7 +18,7 @@ func CreateUser(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("content-type", "application/json")
 	user := new(User)
 	_ = json.NewDecoder(request.Body).Decode(&user)
-	collection := client.Database("appointy").Collection("community")
+	collection := client.Database("Insta_Data").Collection("community")
 	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 	h := sha1.New()
 	h.Write([]byte(user.Password))
@@ -32,7 +32,7 @@ func GetUser(response http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
 	id, _ := primitive.ObjectIDFromHex(params["id"])
 	var user User
-	collection := client.Database("appointy").Collection("community")
+	collection := client.Database("Insta_Data").Collection("DetailsOfThePost")
 	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
 	err := collection.FindOne(ctx, User{ID: id}).Decode(&user)
 	if err != nil {
@@ -52,7 +52,7 @@ func GetUser(response http.ResponseWriter, request *http.Request) {
 func GetCommunity(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("content-type", "application/json")
 	var community []User
-	collection := client.Database("appointy").Collection("community")
+	collection := client.Database("Insta_Data").Collection("DetailsOfThePost")
 	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
 	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
