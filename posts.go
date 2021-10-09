@@ -23,7 +23,7 @@ func CreatePost(response http.ResponseWriter, request *http.Request) {
 	h := sha1.New()
 	h.Write([]byte(post.Password))
 	var HashedPassword string = base64.URLEncoding.EncodeToString(h.Sum(nil))
-	collection_user := client.Database("Insta_Details").Collection("DetailsOfThePost")
+	collection_user := client.Database("Insta_Details").Collection("UserDetails")
 	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
 	err := collection_user.FindOne(ctx, User{Name: post.UserName, PasswordHash: HashedPassword}).Decode(&user)
 	if err != nil {
